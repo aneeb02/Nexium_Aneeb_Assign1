@@ -114,7 +114,7 @@ export default function QuoteCard() {
   >
     {quote}
   </motion.p>
-</AnimatePresence>
+      </AnimatePresence>
     </motion.div>
   )
 }
