@@ -1,9 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import ThemeToggle from "@/components/ThemeToggle"
+import { motion, AnimatePresence } from 'framer-motion'
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 
 const quotes: Record<string, string[]> = {
   life: [
@@ -51,8 +54,7 @@ const quotes: Record<string, string[]> = {
 
 export default function QuoteCard() {
   const [topic, setTopic] = useState('')
-  const [quote, setQuote] = useState('Enter a topic to get a quote!')
-
+  const [quote, setQuote] = useState('Pick a topic to get inspired!')
   const getQuote = () => {
       const key = topic.trim().toLowerCase()
       const topicQuotes = quotes[key]
@@ -72,23 +74,47 @@ export default function QuoteCard() {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-20 p-6 border rounded-2xl shadow-xl 
-    bg-white text-center text-black 
-    dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="max-w-xl mx-auto mt-20 p-6 border rounded-2xl shadow-xl 
+        transition-colors duration-500
+        bg-white text-center text-black 
+        dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700"
+    >
       <h1 className="text-2xl text-black font-semibold mb-4 dark:text-white">Topic-Based Quote Generator</h1>
-      <Input
-        placeholder="Type a topic like 'life', 'success', or 'love'"
-        value={topic}
-        onChange={(e) => setTopic(e.target.value)}
-        className="mb-4 bg-white text-black dark:bg-zinc-700 dark:text-white dark:placeholder:text-zinc-400"
-      />
-      <Button
-      onClick={getQuote}
-      className="mb-6 bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600"
-      >
-        Get Quote
-      </Button>
-      <p className="text-lg font-medium text-black dark:text-white">{quote}</p>
-    </div>
+      <Select onValueChange={setTopic}>
+        <SelectTrigger className="mb-4 w-full dark:bg-zinc-700 dark:text-white">
+          <SelectValue placeholder="Choose a topic" />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.keys(quotes).map((key) => (
+            <SelectItem key={key} value={key} className="capitalize">
+              {key}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <motion.button
+  whileTap={{ scale: 0.95 }}
+  onClick={getQuote}
+  className="mb-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md dark:bg-blue-500 dark:hover:bg-blue-600"
+>
+  Get Quote
+</motion.button>
+      <AnimatePresence mode="wait">
+  <motion.p
+    key={quote}
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -8 }}
+    transition={{ duration: 0.4 }}
+    className="text-lg font-medium text-black dark:text-white"
+  >
+    {quote}
+  </motion.p>
+</AnimatePresence>
+    </motion.div>
   )
 }
