@@ -53,6 +53,7 @@ export default function ThemeToggle() {
               transition={{ duration: 0.35 }}
             >
               <Moon className="w-5 h-5" />
+              Dark
             </motion.span>
           )}
         </AnimatePresence>
