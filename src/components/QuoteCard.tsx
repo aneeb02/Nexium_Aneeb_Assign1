@@ -1,12 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import ThemeToggle from "@/components/ThemeToggle"
-import { motion, AnimatePresence } from 'framer-motion'
-
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
+import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from "framer-motion"
 
 const quotes: Record<string, string[]> = {
   life: [
@@ -23,14 +31,14 @@ const quotes: Record<string, string[]> = {
   ],
   happiness: [
     "Happiness depends upon ourselves.",
-    "The most important thing is to enjoy your life — to be happy — it's all that matters.",
+    "Enjoy your life — be happy — that's all that matters.",
   ],
   courage: [
     "Courage is grace under pressure.",
-    "You cannot swim for new horizons until you have courage to lose sight of the shore.",
+    "You can't swim for new horizons without courage to lose sight of the shore.",
   ],
   friendship: [
-    "A real friend is one who walks in when the rest of the world walks out.",
+    "A real friend walks in when the rest of the world walks out.",
     "Friendship is the only cement that will ever hold the world together.",
   ],
   wisdom: [
@@ -39,7 +47,7 @@ const quotes: Record<string, string[]> = {
   ],
   perseverance: [
     "Fall seven times, stand up eight.",
-    "Perseverance is not a long race; it is many short races one after another.",
+    "Perseverance is not a long race; it's many short races in a row.",
   ],
   learning: [
     "Live as if you were to die tomorrow. Learn as if you were to live forever.",
@@ -47,30 +55,30 @@ const quotes: Record<string, string[]> = {
   ],
   creativity: [
     "Creativity is intelligence having fun.",
-    "You can't use up creativity. The more you use, the more you have.",
+    "The more you use creativity, the more you have.",
   ],
 }
 
+const formSchema = z.object({
+  topic: z.string().min(1, "Please select a topic."),
+})
 
 export default function QuoteCard() {
-  const [topic, setTopic] = useState('')
   const [quote, setQuote] = useState('Pick a topic to get inspired!')
-  const getQuote = () => {
-      const key = topic.trim().toLowerCase()
-      const topicQuotes = quotes[key]
 
-      if (!key) {
-        setQuote("Please enter a topic first.")
-        return
-      }
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: { topic: "" },
+  })
 
-      if (!topicQuotes) {
-        setQuote("Sorry, we don't have quotes on that topic yet.")
-        return
-      }
-
-      const random = topicQuotes[Math.floor(Math.random() * topicQuotes.length)]
-      setQuote(random)
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const selectedQuotes = quotes[values.topic]
+    if (!selectedQuotes) {
+      setQuote("No quotes available for that topic.")
+      return
+    }
+    const random = selectedQuotes[Math.floor(Math.random() * selectedQuotes.length)]
+    setQuote(random)
   }
 
   return (
@@ -79,41 +87,52 @@ export default function QuoteCard() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="max-w-xl mx-auto mt-20 p-6 border rounded-2xl shadow-xl 
-        transition-colors duration-500
-        bg-white text-center text-black 
-        dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700"
+      transition-colors duration-500
+      bg-white text-center text-black 
+      dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700"
     >
-      <h1 className="text-2xl text-black font-semibold mb-4 dark:text-white">Topic-Based Quote Generator</h1>
-      <Select onValueChange={setTopic}>
-        <SelectTrigger className="mb-4 w-full dark:bg-zinc-700 dark:text-white">
-          <SelectValue placeholder="Choose a topic" />
-        </SelectTrigger>
-        <SelectContent>
-          {Object.keys(quotes).map((key) => (
-            <SelectItem key={key} value={key} className="capitalize">
-              {key}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <motion.button
-  whileTap={{ scale: 0.95 }}
-  onClick={getQuote}
-  className="mb-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md dark:bg-blue-500 dark:hover:bg-blue-600"
->
-  Get Quote
-</motion.button>
+      <h1 className="text-2xl font-semibold mb-6">Quote Generator</h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="topic"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Select a Topic</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full dark:bg-zinc-700 dark:text-white">
+                      <SelectValue placeholder="Choose one..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.keys(quotes).map((topic) => (
+                        <SelectItem key={topic} value={topic} className="capitalize">
+                          {topic}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Get Quote</Button>
+        </form>
+      </Form>
+
       <AnimatePresence mode="wait">
-  <motion.p
-    key={quote}
-    initial={{ opacity: 0, y: 8 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -8 }}
-    transition={{ duration: 0.4 }}
-    className="text-lg font-medium text-black dark:text-white"
-  >
-    {quote}
-  </motion.p>
+        <motion.p
+          key={quote}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.4 }}
+          className="mt-6 text-lg font-medium text-black dark:text-white"
+        >
+          {quote}
+        </motion.p>
       </AnimatePresence>
     </motion.div>
   )
