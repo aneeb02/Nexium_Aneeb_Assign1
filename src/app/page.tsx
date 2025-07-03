@@ -21,7 +21,7 @@ export default function Home() {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center justify-center p-8 ">
+        <div className="flex items-center justify-center p-8 bg-[#ffe2a8]">
           <QuoteCard />
         </div>
       </div>

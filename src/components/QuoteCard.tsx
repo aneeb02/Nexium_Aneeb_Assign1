@@ -86,10 +86,8 @@ export default function QuoteCard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="max-w-xl mx-auto mt-20 p-6 border rounded-2xl shadow-xl 
-      transition-colors duration-500
-      bg-white text-center text-black 
-      dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700"
+      className="w-full max-w-md p-6 border border-zinc-200 rounded-2xl shadow-lg 
+      text-center bg-[#fff0d3] text-[#e2a429] dark:bg-zinc-800 dark:text-white dark:border-zinc-700"
     >
       <h1 className="text-2xl font-semibold mb-6">Quote Generator</h1>
       <Form {...form}>
@@ -118,7 +116,9 @@ export default function QuoteCard() {
               </FormItem>
             )}
           />
-          <Button type="submit">Get Quote</Button>
+          <Button type="submit" className="bg-[#fac65f] dark:bg-[#b39353] hover:bg-yellow-400 text-black mt-4">
+            Get Quote
+          </Button>
         </form>
       </Form>
 
