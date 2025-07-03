@@ -65,7 +65,6 @@ const formSchema = z.object({
 
 export default function QuoteCard() {
   const [quote, setQuote] = useState('Pick a topic to get inspired!')
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { topic: "" },
@@ -82,13 +81,17 @@ export default function QuoteCard() {
   }
 
   return (
+    
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-md p-6 border border-zinc-200 rounded-2xl shadow-lg 
-      text-center bg-[#fff0d3] text-[#e2a429] dark:bg-zinc-800 dark:text-white dark:border-zinc-700"
-    >
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md p-6 border rounded-2xl shadow-lg 
+        text-center transition-colors duration-500
+        bg-[#fff0d3] text-[#1a1a1a]
+        dark:bg-[#2c2c2c] dark:text-[#fef9e7] dark:border-[#3d3d3d]"
+      >
+     
       <h1 className="text-2xl font-semibold mb-6">Quote Generator</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -116,22 +119,25 @@ export default function QuoteCard() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="bg-[#fac65f] dark:bg-[#b39353] hover:bg-yellow-400 text-black mt-4">
-            Get Quote
+            <Button
+              type="submit"
+              className="bg-[#fac65f] hover:bg-[#f2b84d] text-black mt-4 dark:bg-[#aa8840] dark:hover:bg-[#b39353] transition-colors duration-300"
+            >            
+              Get Quote
           </Button>
         </form>
       </Form>
 
       <AnimatePresence mode="wait">
         <motion.p
-          key={quote}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.4 }}
-          className="mt-6 text-lg font-medium text-black dark:text-white"
-        >
-          {quote}
+            key={quote}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6 text-lg font-medium font-serif transition-colors duration-500"
+          >
+            {quote}
         </motion.p>
       </AnimatePresence>
     </motion.div>

@@ -9,7 +9,7 @@ export default function Home() {
         <ThemeToggle />
 
         {/* Left side */}
-        <div className="flex flex-col justify-center bg-[#d9b56c] items-center px-8 text-left">
+        <div className="flex flex-col justify-center items-center px-8 text-left bg-[#d9b56c] dark:bg-[#7a5e2d] transition-colors duration-500">
           <div>
             <h1 className="text-5xl md:text-6xl font-black leading-tight font-serif">
               QUOTE<br />GENERATOR
@@ -21,7 +21,7 @@ export default function Home() {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center justify-center p-8 bg-[#ffe2a8]">
+      <div className="flex items-center justify-center p-8 bg-[#ffe2a8] dark:bg-[#1f1f1f] transition-colors duration-500">
           <QuoteCard />
         </div>
       </div>
