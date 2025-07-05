@@ -166,7 +166,7 @@ export default function QuoteCard() {
 
             <Button
               type="submit"
-              className="bg-[#fac65f] mr-10 hover:bg-[#f2b84d] text-black mt-4 dark:bg-[#aa8840] dark:hover:bg-[#b39353] transition-colors duration-300 transition-transform transform hover:scale-[1.02]"
+              className="bg-[#fac65f] mr-10 hover:bg-[#f2b84d] text-black mt-4 dark:bg-[#aa8840] dark:hover:bg-[#b39353] duration-300 transition-transform transform hover:scale-[1.02]"
             > 
               Get Quote
           </Button>
